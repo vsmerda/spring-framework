@@ -82,17 +82,34 @@ public class TagWriter {
 	}
 
 	/**
+	 * Write an HTML tag additional info. 
+	 * @throws IllegalStateException if the opening tag is closed
+	 */
+	protected void writeTagAdditionalInfo(String additionalInfo) throws JspException {
+		if (currentState().isBlockTag()) {
+			throw new IllegalStateException("Cannot write attributes after opening tag is closed.");
+		}
+		this.writer.append(" ").append(additionalInfo);
+	}
+	
+	/**
 	 * Write an HTML attribute with the specified name and value.
 	 * <p>Be sure to write all attributes <strong>before</strong> writing
 	 * any inner text or nested tags.
 	 * @throws IllegalStateException if the opening tag is closed
 	 */
 	public void writeAttribute(String attributeName, String attributeValue) throws JspException {
-		if (currentState().isBlockTag()) {
-			throw new IllegalStateException("Cannot write attributes after opening tag is closed.");
-		}
-		this.writer.append(" ").append(attributeName).append("=\"")
-				.append(attributeValue).append("\"");
+		writeTagAdditionalInfo(attributeName.concat("=\"").concat(attributeValue).concat("\""));
+	}
+
+	/**
+	 * Write an HTML attribute with the specified name.
+	 * <p>Be sure to write all attributes <strong>before</strong> writing
+	 * any inner text or nested tags.
+	 * @throws IllegalStateException if the opening tag is closed
+	 */
+	public void writeAttribute(String attributeName) throws JspException {
+		writeTagAdditionalInfo(attributeName);
 	}
 
 	/**
