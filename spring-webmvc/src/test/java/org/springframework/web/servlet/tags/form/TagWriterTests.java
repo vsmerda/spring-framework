@@ -119,4 +119,15 @@ public class TagWriterTests extends TestCase {
 		assertEquals("<span>Rob Harrop</span>", this.data.toString());
 	}
 
+	public void testAllAttributeTypes() throws Exception {
+		this.writer.startTag("input");
+		this.writer.writeAttribute("type", "text");
+		this.writer.writeAttribute("name", "user");
+		this.writer.writeOptionalAttributeValue("id", null);
+		this.writer.writeOptionalAttributeValue("id", "user");
+		this.writer.writeAttribute("required");		
+		this.writer.endTag();
+		
+		assertEquals("<input type=\"text\" name=\"user\" id=\"user\" required/>", this.data.toString());
+	}
 }
